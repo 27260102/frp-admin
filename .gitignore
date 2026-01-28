@@ -1,0 +1,71 @@
+# ============================================
+# frp-admin 项目 .gitignore
+# ============================================
+
+# ----- 后端 (Go) -----
+
+# 数据库文件
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# 日志文件
+*.log
+
+# 配置文件（可能包含敏感信息）
+frps.toml
+frpc*.toml
+.env
+
+# 二进制文件
+frps
+frpc
+frp-admin
+
+# ----- 前端 (React/Node) -----
+
+# 依赖目录
+node_modules/
+
+# 构建输出
+dist/
+build/
+
+# 前端环境配置
+.env.local
+.env.*.local
+
+# ----- 通用 -----
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# IDE 和编辑器
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# 系统文件
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 测试覆盖率
+coverage/
+*.cover
+*.out
+
+# 调试文件
+*.pprof
+debug
+
+# Claude Code
+.claude/
