@@ -233,6 +233,7 @@ export default function ClientList() {
 
   const openProxyModal = async (client: FrpcConfig) => {
     setSelectedClient(client);
+    setFrpcStatus(null);
     try {
       const [proxyRes, visitorRes] = await Promise.all([
         proxyApi.list(client.id),
@@ -862,8 +863,8 @@ export default function ClientList() {
           </span>
         }
         open={!!selectedClient}
-        onCancel={() => setSelectedClient(null)}
-        footer={<Button onClick={() => setSelectedClient(null)}>关闭</Button>}
+        onCancel={() => { setSelectedClient(null); setFrpcStatus(null); }}
+        footer={<Button onClick={() => { setSelectedClient(null); setFrpcStatus(null); }}>关闭</Button>}
         width={950}
       >
         <Tabs
