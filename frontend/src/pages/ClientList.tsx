@@ -824,6 +824,7 @@ export default function ClientList() {
               {
                 key: 'admin',
                 label: 'frpc 在线管理（可选）',
+                forceRender: true,
                 children: (
                   <>
                     <Form.Item
@@ -1193,6 +1194,7 @@ export default function ClientList() {
               {
                 key: 'transport',
                 label: '传输选项（所有类型）',
+                forceRender: true,
                 children: (
                   <>
                     <Form.Item
@@ -1238,6 +1240,7 @@ export default function ClientList() {
               ...(proxyType !== 'udp' ? [{
                 key: 'health',
                 label: '健康检查（TCP/STCP/XTCP/SUDP）',
+                forceRender: true,
                 children: (
                   <>
                     <Form.Item
@@ -1294,6 +1297,7 @@ export default function ClientList() {
               ...(proxyType === 'tcp' ? [{
                 key: 'plugin',
                 label: '插件配置（仅 TCP）',
+                forceRender: true,
                 children: (
                   <>
                     <Form.Item
