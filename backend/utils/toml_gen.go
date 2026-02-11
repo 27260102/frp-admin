@@ -27,6 +27,7 @@ type VisitorConfig struct {
 	Name       string
 	Type       string
 	ServerName string
+	ServerUser string
 	SecretKey  string
 	BindAddr   string
 	BindPort   int
@@ -223,6 +224,9 @@ func GenerateFrpcToml(config FrpcTomlConfig) string {
 		buf.WriteString(fmt.Sprintf("name = \"%s\"\n", visitor.Name))
 		buf.WriteString(fmt.Sprintf("type = \"%s\"\n", visitor.Type))
 		buf.WriteString(fmt.Sprintf("serverName = \"%s\"\n", visitor.ServerName))
+		if visitor.ServerUser != "" {
+			buf.WriteString(fmt.Sprintf("serverUser = \"%s\"\n", visitor.ServerUser))
+		}
 		if visitor.SecretKey != "" {
 			buf.WriteString(fmt.Sprintf("secretKey = \"%s\"\n", visitor.SecretKey))
 		}

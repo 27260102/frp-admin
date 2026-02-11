@@ -798,10 +798,33 @@ func generateClientToml(client *models.FrpcConfig) (string, error) {
 	// 构建访问者配置
 	var visitors []utils.VisitorConfig
 	for _, v := range client.Visitors {
+		serverName := v.ServerName
+		serverUser := ""
+
+		// 尝试通过 SourceProxyID 查找源代理的客户端 user 和原始代理名称
+		if v.SourceProxyID != nil {
+			var sourceProxy models.Proxy
+			if err := db.First(&sourceProxy, *v.SourceProxyID).Error; err == nil {
+				var sourceClient models.FrpcConfig
+				if err := db.First(&sourceClient, sourceProxy.FrpcConfigID).Error; err == nil {
+					serverName = sourceProxy.Name
+					if sourceClient.User != "" {
+						serverUser = sourceClient.User
+					}
+				}
+			}
+		} else if strings.Contains(serverName, ".") {
+			// 回退：解析存储的 "user.proxyName" 格式
+			parts := strings.SplitN(serverName, ".", 2)
+			serverUser = parts[0]
+			serverName = parts[1]
+		}
+
 		visitor := utils.VisitorConfig{
 			Name:       v.Name,
 			Type:       v.Type,
-			ServerName: v.ServerName,
+			ServerName: serverName,
+			ServerUser: serverUser,
 			SecretKey:  v.SecretKey,
 			BindAddr:   v.BindAddr,
 			BindPort:   v.BindPort,
@@ -1132,16 +1155,11 @@ func getAvailableProxiesHandler(c *gin.Context) {
 		var client models.FrpcConfig
 		db.First(&client, p.FrpcConfigID)
 
-		serverName := p.Name
-		if client.User != "" {
-			serverName = client.User + "." + p.Name
-		}
-
 		result = append(result, ProxyWithClient{
 			Proxy:      p,
 			ClientName: client.Name,
 			ClientUser: client.User,
-			ServerName: serverName,
+			ServerName: p.Name,
 		})
 	}
 

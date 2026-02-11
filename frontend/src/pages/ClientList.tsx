@@ -543,7 +543,15 @@ export default function ClientList() {
   // 生成单个访问的配置并复制
   const copyVisitorConfig = async (visitor: Visitor) => {
     let config = `[[visitors]]\nname = "${visitor.name}"\ntype = "${visitor.type}"\n`;
-    config += `serverName = "${visitor.server_name}"\n`;
+    // 解析 server_name：如果包含 "." 则拆分为 serverUser + serverName
+    const sn = visitor.server_name || '';
+    if (sn.includes('.')) {
+      const dotIdx = sn.indexOf('.');
+      config += `serverName = "${sn.substring(dotIdx + 1)}"\n`;
+      config += `serverUser = "${sn.substring(0, dotIdx)}"\n`;
+    } else {
+      config += `serverName = "${sn}"\n`;
+    }
     if (visitor.secret_key) {
       config += `secretKey = "${visitor.secret_key}"\n`;
     }
